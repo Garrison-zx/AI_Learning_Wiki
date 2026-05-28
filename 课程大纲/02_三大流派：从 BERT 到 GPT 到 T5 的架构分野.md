@@ -4,8 +4,8 @@
 创建日期: 2026-04-29
 最后更新: 2026-04-29
 类型: A 原理型
-时长: 60min
-前置课程: 课程 1（Transformer 架构）
+时长: 80-90min（代码部分 12min 可课后自学，课内专注原理）
+前置课程: 课程 1（Transformer 架构）；建议了解基本 NLP 任务类型（可选：B站/YouTube NLP 入门视频）
 适用模型版本: BERT-base / GPT-2 / T5-base / 对应现代继承者
 下次复审: 2026-07-29
 更新触发条件:
@@ -63,11 +63,11 @@ T5：统一文本转换 → Encoder-Decoder → 适合"转"
 ## 四、课程结构总览
 
 ```
-课程 2：三大流派（60min）
+课程 2：三大流派（80-90min）
 │
 ├── 🎯 Part 1  直觉导入           (8min)
 │   ├── 1.1 一句话理解三大流派
-│   ├── 1.2 "读书人 vs 作家 vs 翻译官"类比
+│   ├── 1.2 "读书人 vs 作家 vs 全能文学者"类比
 │   ├── 1.3 三大流派在 AI 产品中的位置
 │   └── 1.4 学完你能做什么
 │
@@ -89,7 +89,7 @@ T5：统一文本转换 → Encoder-Decoder → 适合"转"
 ├── 🎓 Part 4  产品视角            (5min)
 │   ├── 4.1 产品经理必知的 3 件事
 │   ├── 4.2 三大流派各自催生的产品生态
-│   └── 4.3 前沿动态：2025 年三大流派的命运
+│   └── 4.3 前沿动态（截至课程发布）
 │
 └── 📝 Part 5  作业与测试          (5min)
     ├── 5.1 基础题（3 道）
@@ -110,15 +110,15 @@ T5：统一文本转换 → Encoder-Decoder → 适合"转"
 |------|--------|------|
 | **BERT** | 同时看全文，专注"理解" | 分类、NER、问答（找答案） |
 | **GPT** | 只看左边，专注"生成" | 对话、写作、代码生成 |
-| **T5** | 输入一段文字，输出另一段文字 | 翻译、摘要、改写 |
+| **T5** | 输入一段文字，输出另一段文字（全能文学者，全能≈全不能精） | 翻译、摘要、改写（转换类） |
 
-#### 1.2 生活中的类比：读书人 vs 作家 vs 翻译官
+#### 1.2 生活中的类比：读书人 vs 作家 vs 全能文学者
 
 > **核心类比**（先建立直觉，不出现公式）：
 
 - **BERT = 读书人**：拿到一篇文章，从头到尾读完，理解每个词在整体语境中的含义。适合回答"这篇文章讲的是正面还是负面情绪？"
 - **GPT = 作家**：从第一个词开始写，每次只能看已经写过的部分，不能提前看后面——这是为了训练真正的"创作"能力。适合回答"下一句话是什么？"
-- **T5 = 翻译官**：把一种形式的文字转化为另一种。翻译、摘要、改写——本质上都是"输入一段文字，输出另一段文字"。
+- **T5 = 全能文学者**：既能读懂全文（Encoder），又能写出输出（Decoder）。翻译、摘要、改写、分类——所有 NLP 任务都转成"输入文字→输出文字"。但正如常识所说：全能往往意味着全不能精——在纯理解任务上不如读书人专注，在超大规模生成上不如作家高效，真正的优势在"转换"类任务。
 
 > 💡 **互动题**："给一段用户评论，判断是好评还是差评。"你会选哪种架构？为什么？（先想，再看 2.1 节）
 
@@ -194,7 +194,7 @@ NLP 任务全景图
 | **第 3 层** | 为什么用掩码（MLM）而不是预测下一词？ | 预测下一词只能用左边的信息（单向）；MLM 强迫模型同时利用左右上下文，学到更丰富的语义 |
 | **第 4 层** | MLM 的 15% 是怎么来的？遮住的词怎么处理？ | 遮住太少：任务太简单，学不到深层语义；遮住太多：上下文线索不足。15% 是经验值。被遮住的词：80% 替换为 [MASK]，10% 替换为随机词，10% 保持不变——防止模型只学识别 [MASK] 标记 |
 | **第 5 层** | 双向 Attention 的数学实现？ | Encoder 的自注意力没有 Causal Mask，每个位置可以 attend 到所有其他位置（包括未来的词）。代价：无法自回归生成 |
-| **第 6 层** | BERT 怎么演变的？局限是什么？ | ELMo(2018,浅层双向) → BERT(2018,深度双向,Transformer) → RoBERTa(2019,去掉NSP,更多数据) → ALBERT(2019,参数共享,更小) → DeBERTa(2021,解耦注意力) → ModernBERT(2024,长上下文+RoPE) |
+| **第 6 层** | BERT 怎么演变的？局限是什么？ | ELMo(2018,浅层双向) → BERT(2018,深度双向,Transformer) → RoBERTa(2019,**发现 NSP 有害无益，移除后性能反而提升**，更多数据) → ALBERT(2019,参数共享,更小) → DeBERTa(2021,解耦注意力) → ModernBERT(2024,长上下文+RoPE)。此后几乎所有 BERT 变体都舍弃了 NSP。 |
 
 **BERT 架构细节**：
 
@@ -269,7 +269,7 @@ GPT-2（中等规模）规格：
 | **第 1 层** | T5 是什么？ | Text-to-Text Transfer Transformer，2019 年 Google 提出，Encoder-Decoder 架构，核心思想：把所有 NLP 任务统一为"输入文本 → 输出文本" |
 | **第 2 层** | 为什么需要 T5？BERT 和 GPT 不够用吗？ | BERT 不会生成文字（无 Decoder）；GPT 生成的质量取决于 Prompt，不稳定；翻译、摘要这类"转换"任务天然是 Encoder-Decoder 结构：需要"读懂全部输入"再"生成输出" |
 | **第 3 层** | Text-to-Text 统一范式怎么运作？ | 所有任务加上任务前缀，统一格式输入：`"translate English to French: Hello"` → `"Bonjour"`；`"summarize: [长文本]"` → `"[摘要]"`；`"sentiment: 这电影很好看"` → `"positive"` |
-| **第 4 层** | T5 的预训练目标（Span Corruption）是什么？ | 随机遮住连续的文字片段（span），用 Encoder-Decoder 重建。比 BERT 的 MLM 更难——需要生成缺失的连续文字，而不只是填一个词 |
+| **第 4 层** | T5 的预训练目标（Span Corruption）是什么？ | 随机遮住连续的文字片段（span），用 Encoder-Decoder 重建。**直觉**：MLM 遮住随机单词，Span Corruption 遮住连续片段（如整个短语）——连续片段的语义更完整，模型需要做更难的语义推断，学到的表示更有用；同时 Span Corruption 让输出长度可变，与 Text-to-Text 框架天然契合。比 BERT 的 MLM 更难——需要生成缺失的连续文字，而不只是填一个词 |
 | **第 5 层** | Encoder-Decoder 的 Cross-Attention 如何运作？ | Decoder 生成每个词时，通过 Cross-Attention "回看" Encoder 对整个输入的理解。Q 来自 Decoder 当前状态，K/V 来自 Encoder 输出——这是翻译任务"对齐"的数学实现 |
 | **第 6 层** | T5 的演进脉络？ | T5(2019,11B,统一范式) → mT5(2020,多语言) → FLAN-T5(2022,指令微调) → UL2(2022,混合目标) → Flan-UL2(2023) → 当前 T5 家族主要用于结构化生成任务 |
 
@@ -309,7 +309,7 @@ Cross-Attention 运作：
 | **转换类任务** | ❌ 不擅长 | ⚠️ 可以但不稳定 | ✅ 最适合 |
 | **Scaling 能力** | ⚠️ 有上限（MLM 效率低） | ✅ 极强 | ⚠️ 中等 |
 | **代表后代（2025）** | ModernBERT、DeBERTa | GPT-4o、Claude、LLaMA | Flan-T5、BART |
-| **典型应用** | 搜索、分类、NER | 对话、写作、代码 | 翻译、摘要、改写 |
+| **典型应用** | 搜索、分类、NER | 对话、写作、代码 | 所有 NLP 任务（统一框架），尤其翻译、摘要；低资源场景优于 BERT 微调 |
 
 **架构结构对比图**（ASCII）：
 
@@ -371,6 +371,8 @@ inputs = tokenizer(texts, return_tensors='pt', padding=True,
 with torch.no_grad():
     outputs = model(**inputs)
     # outputs.logits: (batch_size=2, num_labels=2)
+    # BertForSequenceClassification 内部自动取 [CLS] token（位置 0）的输出接分类头
+    # 等价于：cls_output = outputs.last_hidden_state[:, 0, :]  # [CLS] 始终在位置 0
     probs = F.softmax(outputs.logits, dim=-1)
 
 for text, prob in zip(texts, probs):
@@ -382,7 +384,12 @@ for text, prob in zip(texts, probs):
 # 可通过 outputs.hidden_states[-1][:, 0, :] 获取 [CLS] 向量
 ```
 
-> **说明**：未经微调的模型分类随机，实际使用需用情感数据集微调。本示例展示的是调用范式。
+> **说明**：⚠️ 此代码演示的是架构用法，`BertForSequenceClassification` 的线性分类头**未经训练，输出无意义**（接近随机）。如需真实分类效果，请加载已 fine-tuned 的模型：
+> ```python
+> # 替换上方 from_pretrained 的模型名即可获得真实中文情感分类效果
+> tokenizer = BertTokenizer.from_pretrained('uer/roberta-base-finetuned-jd-binary-chinese')
+> model = BertForSequenceClassification.from_pretrained('uer/roberta-base-finetuned-jd-binary-chinese')
+> ```
 
 ---
 
@@ -395,6 +402,9 @@ for text, prob in zip(texts, probs):
 输入：文本前缀（Prompt）
 输出：续写后的完整文本
 预计运行：首次下载约 60s，生成 < 5s（CPU）
+注意：GPT-2 原版仅支持英文，以下代码演示英文生成；
+      中文生成请将模型替换为 uer/gpt2-chinese-cluecorpussmall，
+      并将 prompt 改为中文（如"人工智能的未来是"）
 """
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
@@ -435,6 +445,9 @@ print(f"生成: {generated}")
 输入：待摘要的英文长文
 输出：简短摘要
 预计运行：首次下载约 120s，推理 < 10s（CPU）
+注意：t5-small 仅支持英文摘要；
+      中文摘要请替换为 csebuetnlp/mT5_multilingual_XLSum，
+      并将任务前缀改为 "summarize: " + 中文文本
 """
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
@@ -488,7 +501,7 @@ print(f"摘要: {summary}")
 | **GPT 流（Decoder）** | ChatGPT、Claude、Copilot、Cursor、Kimi | 对话、写作、代码生成、通用助手 |
 | **T5 流（Enc-Dec）** | DeepL 翻译（类似架构）、Grammarly 纠错功能 | 翻译、摘要、文本改写 |
 
-#### 4.3 前沿动态：2025 年三大流派的命运
+#### 4.3 前沿动态（截至课程发布，2026-04-29）
 
 - **GPT（Decoder-only）全面称霸**：ChatGPT 的成功让整个行业转向 Decoder-only。LLaMA、Qwen、Mistral、Claude 都是 Decoder-only 架构。理由：Scaling 能力强 + 指令微调让它也能做理解任务
 - **BERT 的垂直市场**：在搜索、推荐、企业 NLP 等对成本敏感的场景，小型 BERT 模型（ModernBERT 2024）仍是主流，因为推理速度快、成本低
@@ -669,7 +682,7 @@ T5 把分类标签也当作"文本"来生成，虽然看起来奇怪，但优势
 
 | # | 检查项 | 状态 |
 |---|--------|------|
-| 1 | Part 1 有生活类比（读书人/作家/翻译官） | ✅ |
+| 1 | Part 1 有生活类比（读书人/作家/全能文学者） | ✅ |
 | 2 | Part 2 对三个架构各做六层追问 | ✅ |
 | 3 | Part 2 标注了面试高频考点（🔥） | ✅ |
 | 4 | Part 2 标注了易错提醒（⚠️） | ✅ |
